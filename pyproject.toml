@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "django-docs-tutor"
+version = "0.1.0"
+description = "Dependency file for Django Doc's project"
+authors = ["Eduardo Rezaghi <eduardo.rezaghi@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "2.2"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.12.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
