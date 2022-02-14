@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
-
-from .models import Question
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.urls import reverse
+from .models import Question, Choice
 
 # Create your views here.
 def index(request):
     """View-function for index page"""
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    latest_question_list = Question.objects.order_by('-pub_date')[:]
     context = {
         'latest_question_list': latest_question_list,
     }
@@ -26,9 +26,19 @@ def results(request, question_id):
     # one object from model and users filter() method instead
     # of get()
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/details.html')
+    return render(request, 'polls/results.html', {'question': question})
 
 def vote(request, question_id):
     """View-function for voting in a question"""
-    response = f"You're voting on question {question_id}."
-    return HttpResponse(response)
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice."
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
