@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 
 from .models import Question
@@ -14,14 +14,18 @@ def index(request):
 
 def detail(request, question_id):
     """View-function for details about a question"""
-    return HttpResponse(f"You're lookin at question {question_id}.")
-
-def results(request, question_id):
-    """View-function for results about a question poll"""
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
-        raise Http404("Question does not exist")
+        raise Http404("Question Does Not Exist")
+    return render(request, 'polls/detail.html', {'question': question})
+
+def results(request, question_id):
+    """View-function for results about a question poll"""
+    # get_list_or_404 is similar, but filter (query) more than
+    # one object from model and users filter() method instead
+    # of get()
+    question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/details.html')
 
 def vote(request, question_id):
