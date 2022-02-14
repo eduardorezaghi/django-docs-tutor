@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.8"
 Django = "2.2"
+pylint-django = "^2.5.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
