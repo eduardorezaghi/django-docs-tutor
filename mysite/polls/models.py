@@ -11,7 +11,8 @@ class Question(models.Model):
     def was_published_recently(self):
         """Method returning a True of False assertion depending
         if the question was published recently"""
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
     def __str__(self) -> str:
         return str(self.question_text)
